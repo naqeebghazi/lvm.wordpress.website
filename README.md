@@ -3,9 +3,9 @@
 Implementing WordPress Website with LVM Storage Management on AWS EC2 Ubuntu
 
 A typical 3-tier architecture (3TA) consists of:
-- Presentation tier
-- Application tier
-- Data tier
+- Presentation tier: What you see and interact with in your web browser or application
+- Application tier: Backend of the application/website that processes all the input/outputs and any other computational requirements
+- Data tier: Data storage and data access
 
 Simplified outline of a 3TA:
 
