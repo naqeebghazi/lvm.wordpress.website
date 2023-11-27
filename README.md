@@ -31,4 +31,7 @@ Check that volumes are attached:
 
 ![lsblk](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk.png?raw=true)
 
+The volumes you added are xvda, xvdc, xvdd. These corresspond to Vol1, Vol2 and Vol3 respectiively in the AWS console:
+
+![Vol123](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/Vol123.png?raw=true)
 
