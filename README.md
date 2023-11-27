@@ -113,6 +113,15 @@ Use vgcreate utility to add all 3 PVs to a volume group (vg) called webdata-vg:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vg-create.png?raw=true)
 
+The lvcreate command is part of the Logical Volume Manager (LVM) system in Linux. It is used to create logical volumes within a volume group. Logical volumes are similar to partitions in traditional disk partitioning schemes but offer more flexibility and features. 
+
+Use lvcreate to make to logical volumes from the webdata-vg volume group:
+
+    $ sudo lvcreate -n apps-lv -L 14G webdata-vg
+    $ sudo lvcreate -n logs-lv -L 14G webdata-vg
+
+![lvcreate](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvcreate_apps.logs.png?raw=true)
+
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
   
