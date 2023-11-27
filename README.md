@@ -71,11 +71,36 @@ Check Partition with lsblk command:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblkcheckPartition.png?raw=true)
 
-Install lvm
+Install lvm:
 
     $ sudo yum install lvm2
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvm2install.png?raw=true)
+
+Lvm helps us to manage the disks. Run LVM disk scan:
+
+    $ sudo pvcreate /dev/xvdb
+
+Output:
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvmdiskscan.png?raw=true)
+
+The pvcreate command in LVM (Logical Volume Manager) is used to initialize a physical volume, preparing it for use in an LVM volume group. When you add a new hard disk or a partition to an LVM setup, you need to run pvcreate on that device to make it available for use in LVM. 
+Run pvcreate on each disk:
+
+    $ sudo pvcreate /dev/xvdb1
+    $ sudo pvcreate /dev/xvdc1
+    $ sudo pvcreate /dev/xvdd1
+
+This creates physical volumes with a new name = original disk name + number (e.g. xvda -> xvda1 
+
+Then verfiy the above commands worked by running:
+
+    $ sudo pvs
+
+Result of above:
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/pvcreate.png?raw=true)
 
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
