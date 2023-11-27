@@ -102,6 +102,17 @@ Result of above:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/pvcreate.png?raw=true)
 
+
+Use vgcreate utility to add all 3 PVs to a volume group (vg) called webdata-vg:
+
+    $ sudo vgcreate webdata-vg /dev/xvdb1 /dev/xvdc1 /dev/xvdd1
+
+  Then verify the above:
+
+      $ sudo vgs
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vg-create.png?raw=true)
+
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
   
