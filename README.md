@@ -122,6 +122,22 @@ Use lvcreate to make to logical volumes from the webdata-vg volume group:
 
 ![lvcreate](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvcreate_apps.logs.png?raw=true)
 
+Validate entire setup:
+
+    $ sudo vgdisplay -v #view complete setup - VG, PV, LV
+    $ sudo lsblk
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vgdisplay.png?raw=true)
+
+&
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk_2.png?raw=true)
+
+
+
+
+
+
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
   
