@@ -31,7 +31,48 @@ Check that volumes are attached:
 
 ![lsblk](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk.png?raw=true)
 
-The volumes you added are xvda, xvdc, xvdd. These corresspond to Vol1, Vol2 and Vol3 respectiively in the AWS console:
+The volumes you added are xvdb, xvdc, xvdd. These corresspond to Vol1, Vol2 and Vol3 respectiively in the AWS console:
 
 ![Vol123](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/Vol123.png?raw=true)
 
+To see all the mounted volumes and free space on your server:
+
+    $ df -h
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/df-h.png?raw=true)
+
+Use gdisk to create a single partition on each of the 3 disks:
+
+    $ sudo gdisk /dev/xvdb
+    $ sudo gdisk /dev/xvdc
+    $ sudo gdisk /dev/xvdd
+
+  After each gdisk command above, follow these steps:
+  Once inside gdisk, you can create partitions using the following steps:
+  
+  - Press n to create a new partition.
+  - Choose the partition number.
+  - Set the starting sector and ending sector for the partition. If you want to use the entire disk, you can press Enter to accept the default values.
+  - Choose the partition type. You can press Enter to accept the default if you're unsure.
+  - Optionally, you can set a name for the partition.
+  - Repeat these steps to create additional partitions if needed.
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/df-h.png?raw=true)
+  
+  Review Changes:
+  After creating partitions, use the p command to review the changes.
+  
+  Write Changes to Disk:
+  If you're satisfied with the changes, press Y to write the changes to the disk.
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/wY.png?raw=true)
+  
+  Format Partitions:
+  After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
+  
+  bash
+  Copy code
+  sudo mkfs.ext4 /dev/sdXn
+  Replace /dev/sdXn with the actual partition identifier.
+  
+  Remember to be cautious when using partitioning tools, as they can result in data loss if not used correctly. Make sure you have a backup of important data before making any changes to disk partitions.
