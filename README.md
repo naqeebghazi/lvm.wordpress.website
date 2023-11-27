@@ -20,7 +20,7 @@ So, our project will be to:
   1. Data tier: Setup of storage for both Web and Database servers
   2. Application tier: WordPress installation onto a Webserver which is connected to a seperate MySQL database server
 
-Create a Webserver EC2 instance using a RedHat image (free tier) and ensure you have 3 gp2/gp3 EBS volumes attached to the instance. 
+Create a Webserver EC2 instance using a RedHat image (free tier) and ensure you attach 3 gp2/gp3 EBS volumes to the instance. 
 SSH into the instance and update the system:
 
     $ sudo yum update
