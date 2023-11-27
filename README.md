@@ -66,7 +66,17 @@ Use gdisk to create a single partition on each of the 3 disks:
   If you're satisfied with the changes, press Y to write the changes to the disk.
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/wY.png?raw=true)
-  
+
+Check Partition with lsblk command:
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblkcheckPartition.png?raw=true)
+
+Install lvm
+
+    $ sudo yum install lvm2
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvm2install.png?raw=true)
+
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
   
