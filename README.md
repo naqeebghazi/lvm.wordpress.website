@@ -31,3 +31,4 @@ Check that volumes are attached:
 
 ![lsblk](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk.png?raw=true)
 
+
