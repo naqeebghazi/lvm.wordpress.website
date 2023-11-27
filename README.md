@@ -133,7 +133,12 @@ Validate entire setup:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk_2.png?raw=true)
 
+Format the new logical volumes you created with the ext4 filesystem:
 
+    $ sudo mkfs -t ext4 /dev/webdata-vg/apps-lv
+    $ sudo mkfs -t ext4 /dev/webdata-vg/logs-lv
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/mkfs_ext4.png?raw=true)
 
 
 
