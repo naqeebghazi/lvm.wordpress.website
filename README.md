@@ -308,25 +308,29 @@ Use lvcreate to make to logical volumes from the dbdata-vg volume group:
     $ sudo lvcreate -n db-lv -L 14G dbdata-vg
     $ sudo lvcreate -n logs-lv -L 14G dbdata-vg
 
-![lvcreate](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvcreate_apps.logs.png?raw=true)
+Validate with lvs which lists the logical volumes
+
+    $ sudo lvs
+
+![lvcreate](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/db_lvs.png?raw=true)
 
 Validate entire setup:
 
     $ sudo vgdisplay -v #view complete setup - VG, PV, LV
     $ sudo lsblk
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vgdisplay.png?raw=true)
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/db-validateALL.png?raw=true)
 
 &
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lsblk_2.png?raw=true)
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/db_lsblk.png?raw=true)
 
 Format the new logical volumes you created with the ext4 filesystem:
 
     $ sudo mkfs -t ext4 /dev/dbdata-vg/db-lv
     $ sudo mkfs -t ext4 /dev/dbdata-vg/logs-lv
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/mkfs_ext4.png?raw=true)
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/dbdata_format_ext4.png?raw=true)
 
 ## Part 2: Setting up your logical volumes as part of a webserver
 
@@ -354,6 +358,8 @@ Restore log files back into /var/log directory:
 
     $ sudo rsync -av /home/recovery/logs/log/. /var/log
 
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoRsync_forDB.png?raw=true)
+
 Update /etc/fstab. This persists the mount configuration even after restart. 
 
     $ sudo blkid 
@@ -368,7 +374,7 @@ Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UU
 
     $ sudo vi /etc/fstab
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vifstab.png?raw=true)
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/database-fstab.png?raw=true)
 
 Ensure formatting is the same as above, especially the columns next to the UUIDs. 
 Save the file with :wq!
@@ -382,8 +388,5 @@ Validate setup
 
     $ df -h
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/daemon-reload.png?raw=true)
-
-
-
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/df-h_db.png?raw=true)
 
