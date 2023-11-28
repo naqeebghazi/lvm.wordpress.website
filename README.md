@@ -141,7 +141,7 @@ Format the new logical volumes you created with the ext4 filesystem:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/mkfs_ext4.png?raw=true)
 
-## Part 2: Setting up your webserver
+## Part 2: Setting up your logical volumes as part of a webserver
 
 Create /var/www/html directory to store website files
 
@@ -197,12 +197,13 @@ Validate setup
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/daemon-reload.png?raw=true)
 
-  Format Partitions:
-  After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
-  
-  bash
-  Copy code
-  sudo mkfs.ext4 /dev/sdXn
-  Replace /dev/sdXn with the actual partition identifier.
-  
-Remember to be cautious when using partitioning tools, as they can result in data loss if not used correctly. Make sure you have a backup of important data before making any changes to disk partitions.
+
+## Part 3: Installing Wrodpress and MySQL configuration
+
+### Preapring the database server
+
+Create a new EC2 instance for the Dayabase server by following all the same steps as above, with the following difference:
+
+    Instead of apps-lv, make db-lv and mount it to /db instead of /var/www/html
+
+
