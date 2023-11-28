@@ -20,7 +20,8 @@ So, our project will be to:
   1. Data tier: Setup of storage for both Web and Database servers
   2. Application tier: WordPress installation onto a Webserver which is connected to a seperate MySQL database server
 
-Create a Webserver EC2 instance using a RedHat image (free tier) and ensure you attach 3 gp2/gp3 EBS volumes to the instance. 
+## Part 1: Create a Webserver EC2 instance using a RedHat image (free tier) and ensure you attach 3 gp2/gp3 EBS volumes to the instance. 
+
 SSH into the instance and update the system:
 
     $ sudo yum update
@@ -140,7 +141,7 @@ Format the new logical volumes you created with the ext4 filesystem:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/mkfs_ext4.png?raw=true)
 
-## 
+## Part 2: Setting up your webserver
 
 
   Format Partitions:
