@@ -118,7 +118,7 @@ The lvcreate command is part of the Logical Volume Manager (LVM) system in Linux
 
 Use lvcreate to make to logical volumes from the webdata-vg volume group:
 
-    $ sudo lvcreate -n db-lv -L 14G webdata-vg
+    $ sudo lvcreate -n apps-lv -L 14G webdata-vg
     $ sudo lvcreate -n logs-lv -L 14G webdata-vg
 
 ![lvcreate](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvcreate_apps.logs.png?raw=true)
@@ -157,7 +157,7 @@ Mount the html directory on the apps-lv logical volume:
 
 Backup all the files in the /var/log directory into the /home/recovery/logs
 
-    $ sudo rsync -av /var/log/. /home/recovery/logs
+    $ sudo rsync -av /var/log/. /home/recovery/logs/
 
 Mount the /var/log directory on the log-lv logivcal volume. 
 
@@ -165,7 +165,7 @@ Mount the /var/log directory on the log-lv logivcal volume.
 
 Restore log files back into /var/log directory:
 
-    $ sudo rsync -av /home/recovery/logs/log/. /var/log
+    $ sudo rsync -av /home/recovery/logs/. /var/log
 
 Update /etc/fstab. This persists the mount configuration even after restart. 
 
@@ -174,8 +174,9 @@ Update /etc/fstab. This persists the mount configuration even after restart.
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoblkid.png?raw=true)
 
 These two sections from the above command are important. Take the UUIDs and copy to clipboard as instructued below. 
-/dev/mapper/webdata--vg-logs--lv: UUID="b33c1c1b-7cdf-4554-81fd-ca9ba25ddf17" TYPE="ext4"
-/dev/mapper/webdata--vg-apps--lv: UUID="d8722a79-579c-4e7f-8e36-c57092c746c3" TYPE="ext4"
+/dev/mapper/webdata--vg-apps--lv: UUID="0c34dba8-4698-46f5-8ac6-b290574fe73b" TYPE="ext4"
+/dev/mapper/webdata--vg-logs--lv: UUID="d4dc2e72-a8c0-4439-abd1-fd941ca853dd" TYPE="ext4"
+
 
 Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation marks):
 
@@ -356,7 +357,7 @@ Mount the /var/log directory on the log-lv logivcal volume.
 
 Restore log files back into /var/log directory:
 
-    $ sudo rsync -av /home/recovery/logs/log/. /var/log
+    $ sudo rsync -av /home/recovery/logs/. /var/log
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoRsync_forDB.png?raw=true)
 
@@ -366,9 +367,9 @@ Update /etc/fstab. This persists the mount configuration even after restart.
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoblkid.png?raw=true)
 
-These two sections from the above command are important. Take the UUIDs and copy to clipboard as instructued below. 
-/dev/mapper/dbdata--vg-logs--lv: UUID="b33c1c1b-7cdf-4554-81fd-ca9ba25ddf17" TYPE="ext4"
-/dev/mapper/dbdata--vg-apps--lv: UUID="d8722a79-579c-4e7f-8e36-c57092c746c3" TYPE="ext4"
+These two sections from the above command are important. Take the UUIDs and copy to clipboard as instructued below:
+/dev/mapper/db--vg-db--lv: UUID="86c93a31-63a5-49ed-ae25-e7444833f735" TYPE="ext4"
+/dev/mapper/db--vg-logs--lv: UUID="1b076527-6214-4e7e-8068-7335ee8d9672" TYPE="ext4"
 
 Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation marks):
 
@@ -422,15 +423,15 @@ Restart Apache:
 
 Download Wordpress and copy Wordpress to /var/www/html
 
-    mkdir wordpress
+    sudo mkdir wordpress
     cd wordpress
     sudo wget http://wordpress.org/latest.tar.gz
     sudo tar xzvf latest.tar.gz
     sudo rm -rf latest.tar.gz
-    cp wordpress/wp-config-sample.php wordpress/wp-config.php
-    cp -R wordpress /var/www/html/
+    sudo cp wordpress/wp-config-sample.php wordpress/wp-config.php
+    sudo cp -R wordpress /var/www/html/
 
-Configure SELinux policies:
+Configure SELinux policies (ownership):
 
      sudo chown -R apache:apache /var/www/html/wordpress
      sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
@@ -439,8 +440,8 @@ Configure SELinux policies:
 
 ## Part 5: Install MySQL on your DB Server EC2
 
-    sudo yum update
-    sudo yum install mysql-server
+    sudo yum -y update
+    sudo yum -y install mysql-server
 
 Verify mysql is running
 
@@ -468,12 +469,25 @@ Open MySQL port 3306 on DB server via your security groups. Only allow access to
 
 Install MySQL client on the Webserver and see if you can connect your Webserver to the DB by using the mysql-client:
 
-    sudo yum install mysql
-    sudo mysql -u admin -p -h <DB-Server-Private-IP-address>
+    sudo yum -y install mysql
+    sudo mysql -u myuser -p -h 172.31.37.94
+
+Security groups should be as follows:
+
+  Web Server:
+    Outbound rules: All Traffic 
+    Inbound rules: All Traffic
+  
+  MySQL DB Server:
+    Outbound rules: None required
+    Inbound rules: MySQL/Aurora, port 3306, IPv4, IP Address of WebServer
+
+![]()
 
 Verify you can successfully execute SHOW DATABASES; to see list of databases
-Change permissions and configuration so Apache can use Wordpress
-Enable TCP port80 inbound rules for WebServer (enable from everywhere 0.0.0.0/0 or from your own IP address
+
+Enable TCP port80 inbound rules for WebServer (enable from everywhere 0.0.0.0/0 or from your own IP address)
+
 Try accessing from your browser: http://<web-server-publicIP>/wordpress
 
 
