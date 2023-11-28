@@ -24,7 +24,7 @@ So, our project will be to:
 
 SSH into the instance and update the system:
 
-    $ sudo yum update
+    $ sudo yum -y update
 
 Check that volumes are attached:
 
@@ -44,9 +44,9 @@ To see all the mounted volumes and free space on your server:
 
 Use gdisk to create a single partition on each of the 3 disks:
 
-    $ sudo gdisk /dev/xvdb
-    $ sudo gdisk /dev/xvdc
-    $ sudo gdisk /dev/xvdd
+    sudo gdisk /dev/xvdb
+    sudo gdisk /dev/xvdc
+    sudo gdisk /dev/xvdd
 
   After each gdisk command above, follow these steps:
   Once inside gdisk, you can create partitions using the following steps:
@@ -74,16 +74,14 @@ Check Partition with lsblk command:
 
 Install lvm:
 
-    $ sudo yum install lvm2
+    sudo yum -y install lvm2
 
-![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvm2install.png?raw=true)
 
-Lvm helps us to manage the disks. Run LVM disk scan:
+Lvm helps us to manage the partitioned disks. Run LVM disk scan:
 
-    $ sudo pvcreate /dev/xvdb
+    sudo lvmdiskscan
 
 Output:
-
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/lvmdiskscan.png?raw=true)
 
 The pvcreate command in LVM (Logical Volume Manager) is used to initialize a physical volume, preparing it for use in an LVM volume group. When you add a new hard disk or a partition to an LVM setup, you need to run pvcreate on that device to make it available for use in LVM. 
@@ -93,7 +91,9 @@ Run pvcreate on each disk:
     $ sudo pvcreate /dev/xvdc1
     $ sudo pvcreate /dev/xvdd1
 
-This creates physical volumes with a new name = original disk name + number (e.g. xvda -> xvda1 
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/pvcreate_partioneddisks.png?raw=true)
+
+This creates physical volumes with a new name = original disk name + number (e.g. xvda -> xvda1)
 
 Then verfiy the above commands worked by running:
 
@@ -390,3 +390,109 @@ Validate setup
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/df-h_db.png?raw=true)
 
+#############################################################################################################################################################################
+
+## Part 4: Install Wordpress on WebServer
+
+Update the pkg manager and install apache and php
+
+    sudo yum update -y
+    sudo yum -y install wget httpd php php-mysqlnd php-fpm php-json
+
+Start Apache:
+
+    sudo systemctl enable httpd
+    sudo systemctl start httpd
+
+Install PHP and dependencies:
+
+    sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+    sudo yum module list php
+    sudo yum module reset php
+    sudo yum module enable php:remi-7.4
+    sudo yum install php php-opcache php-gd php-curl php-mysqlnd
+    sudo systemctl start php-fpm
+    sudo systemctl enable php-fpm
+    setsebool -P httpd_execmem 1
+
+Restart Apache:
+
+    sudo systemctl restart httpd
+
+Download Wordpress and copy Wordpress to /var/www/html
+
+    mkdir wordpress
+    cd wordpress
+    sudo wget http://wordpress.org/latest.tar.gz
+    sudo tar xzvf latest.tar.gz
+    sudo rm -rf latest.tar.gz
+    cp wordpress/wp-config-sample.php wordpress/wp-config.php
+    cp -R wordpress /var/www/html/
+
+Configure SELinux policies:
+
+     sudo chown -R apache:apache /var/www/html/wordpress
+     sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
+     sudo setsebool -P httpd_can_network_connect=1
+
+
+## Part 5: Install MySQL on your DB Server EC2
+
+    sudo yum update
+    sudo yum install mysql-server
+
+Verify mysql is running
+
+    sudo systemctl status mysqld
+
+If note, restart it
+
+    sudo systemctl restart mysqld
+    sudo systemctl enable mysqld
+
+Configure the DB to work with Wordpress
+
+    sudo mysql
+    CREATE DATABASE wordpress;
+    CREATE USER `myuser`@`<Web-Server-Private-IP-Address>` IDENTIFIED BY 'mypass';
+    GRANT ALL ON wordpress.* TO 'myuser'@'<Web-Server-Private-IP-Address>';
+    FLUSH PRIVILEGES;
+    SHOW DATABASES;
+    exit
+
+Configure Wordpress to connect to remote DB.
+Open MySQL port 3306 on DB server via your security groups. Only allow access to DB server via your Webserver's IP address. In the inbound rules configuration of the SG, specify source as /32
+
+![]()
+
+Install MySQL client on the Webserver and see if you can connect your Webserver to the DB by using the mysql-client:
+
+    sudo yum install mysql
+    sudo mysql -u admin -p -h <DB-Server-Private-IP-address>
+
+Verify you can successfully execute SHOW DATABASES; to see list of databases
+Change permissions and configuration so Apache can use Wordpress
+Enable TCP port80 inbound rules for WebServer (enable from everywhere 0.0.0.0/0 or from your own IP address
+Try accessing from your browser: http://<web-server-publicIP>/wordpress
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
