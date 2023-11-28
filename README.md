@@ -140,7 +140,7 @@ Format the new logical volumes you created with the ext4 filesystem:
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/mkfs_ext4.png?raw=true)
 
-
+## 
 
 
   Format Partitions:
