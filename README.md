@@ -173,19 +173,29 @@ Update /etc/fstab. This persists the mount configuration even after restart.
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoblkid.png?raw=true)
 
-Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation mraks):
+These two sections from the above command are important. Take the UUIDs and copy to clipboard as instructued below. 
+/dev/mapper/webdata--vg-logs--lv: UUID="b33c1c1b-7cdf-4554-81fd-ca9ba25ddf17" TYPE="ext4"
+/dev/mapper/webdata--vg-apps--lv: UUID="d8722a79-579c-4e7f-8e36-c57092c746c3" TYPE="ext4"
+
+Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation marks):
 
     $ sudo vi /etc/fstab
 
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vifstab.png?raw=true)
 
-/dev/mapper/webdata--vg-logs--lv: UUID="b33c1c1b-7cdf-4554-81fd-ca9ba25ddf17" TYPE="ext4"
-/dev/mapper/webdata--vg-apps--lv: UUID="d8722a79-579c-4e7f-8e36-c57092c746c3" TYPE="ext4"
-    
+Ensure formatting is the same as above, especially the columns next to the UUIDs. 
+Save the file with :wq!
 
+Test new configuration and reload the file:
 
+    $ sudo mount -a
+    $ sudo systemctl daemon-reload
 
+Validate setup
 
+    $ df -h
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/daemon-reload.png?raw=true)
 
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
