@@ -143,6 +143,49 @@ Format the new logical volumes you created with the ext4 filesystem:
 
 ## Part 2: Setting up your webserver
 
+Create /var/www/html directory to store website files
+
+    $ sudo mkdir -p /var/www/html
+
+Create /home/recovery/logs to store backup of log data:
+
+    $ sudo mkdir -p /home/recovery/logs
+
+Mount the html directory on the apps-lv logical volume:
+
+    $ sudo mount /dev/webdata-vg/apps-lv /var/www/html/
+
+Backup all the files in the /var/log directory into the /home/recovery/logs
+
+    $ sudo rsync -av /var/log/. /home/recovery/logs
+
+Mount the /var/log directory on the log-lv logivcal volume. 
+
+    $ sudo mount /dev/webdata-vg/logs-lv /var/log
+
+Restore log files back into /var/log directory:
+
+    $ sudo rsync -av /home/recovery/logs/log/. /var/log
+
+Update /etc/fstab. This persists the mount configuration even after restart. 
+
+    $ sudo blkid 
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoblkid.png?raw=true)
+
+Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation mraks):
+
+    $ sudo vi /etc/fstab
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/vifstab.png?raw=true)
+
+/dev/mapper/webdata--vg-logs--lv: UUID="b33c1c1b-7cdf-4554-81fd-ca9ba25ddf17" TYPE="ext4"
+/dev/mapper/webdata--vg-apps--lv: UUID="d8722a79-579c-4e7f-8e36-c57092c746c3" TYPE="ext4"
+    
+
+
+
+
 
   Format Partitions:
   After partitioning, you need to format the partitions using a filesystem of your choice. For example, to format a partition with ext4:
@@ -152,4 +195,4 @@ Format the new logical volumes you created with the ext4 filesystem:
   sudo mkfs.ext4 /dev/sdXn
   Replace /dev/sdXn with the actual partition identifier.
   
-  Remember to be cautious when using partitioning tools, as they can result in data loss if not used correctly. Make sure you have a backup of important data before making any changes to disk partitions.
+Remember to be cautious when using partitioning tools, as they can result in data loss if not used correctly. Make sure you have a backup of important data before making any changes to disk partitions.
