@@ -408,7 +408,7 @@ Start Apache:
 Install PHP and dependencies:
 
     sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-    sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+    sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm --skip-broken
     sudo yum module list php
     sudo yum module reset php
     sudo yum module enable php:remi-7.4
@@ -430,6 +430,10 @@ Download Wordpress and copy Wordpress to /var/www/html
     sudo rm -rf latest.tar.gz
     sudo cp wordpress/wp-config-sample.php wordpress/wp-config.php
     sudo cp -R wordpress /var/www/html/
+
+Edit the wp-config.php file:
+
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images2/wp-configimage.png?raw=true)
 
 Configure SELinux policies (ownership):
 
@@ -469,8 +473,6 @@ Configure the DB to work with Wordpress
 Configure Wordpress to connect to remote DB.
 Open MySQL port 3306 on DB server via your security groups. Only allow access to DB server via your Webserver's IP address. In the inbound rules configuration of the SG, specify source as /32
 
-![]()
-
 Install MySQL client on the Webserver and see if you can connect your Webserver to the DB by using the mysql-client:
 
     sudo yum -y install mysql
@@ -498,6 +500,12 @@ Verify you can successfully execute SHOW DATABASES; to see list of databases
 Enable TCP port80 inbound rules for WebServer (enable from everywhere 0.0.0.0/0 or from your own IP address)
 
 Try accessing from your browser: http://<web-server-publicIP>/wordpress
+
+Successful Wordpress access via web browser:
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images2/wordpressInBrowser.png?raw=true)
+
+Post-installation of Wordpress in browser:
+![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images2/wp_loginSuccess.png?raw=true)
 
 
 
