@@ -151,6 +151,12 @@ Create /home/recovery/logs to store backup of log data:
 
     $ sudo mkdir -p /home/recovery/logs
 
+The mount command tells us what storage devices are mounted on our system:
+
+    $ mount  | grep xvd
+
+We can use grep to narrow down the output for our devices
+
 Mount the html directory on the apps-lv logical volume:
 
     $ sudo mount /dev/webdata-vg/apps-lv /var/www/html/
