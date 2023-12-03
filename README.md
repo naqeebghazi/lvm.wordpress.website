@@ -180,8 +180,9 @@ Update /etc/fstab. This persists the mount configuration even after restart.
 ![](https://github.com/naqeebghazi/lvm.wordpress.website/blob/main/images/sudoblkid.png?raw=true)
 
 These two sections from the above command are important. Take the UUIDs and copy to clipboard as instructued below. 
-/dev/mapper/webdata--vg-apps--lv: UUID="0c34dba8-4698-46f5-8ac6-b290574fe73b" TYPE="ext4"
-/dev/mapper/webdata--vg-logs--lv: UUID="d4dc2e72-a8c0-4439-abd1-fd941ca853dd" TYPE="ext4"
+
+    /dev/mapper/webdata--vg-apps--lv: UUID="0c34dba8-4698-46f5-8ac6-b290574fe73b" TYPE="ext4"
+    /dev/mapper/webdata--vg-logs--lv: UUID="d4dc2e72-a8c0-4439-abd1-fd941ca853dd" TYPE="ext4"
 
 
 Edit /etc/fstab and replace the UUID in it with the UUIDs of the /dev/mapper/ UUIDs (removing the quotation marks):
